@@ -318,7 +318,6 @@ class icinga::server (
   class { '::icinga::server::users': } ->
   class { '::icinga::server::packages': } ->
   class { '::icinga::server::configs': } ->
-  class { '::icinga::server::services': } ->
-  Class [ '::icinga::server' ]
+  class { '::icinga::server::services': }
 
 }
