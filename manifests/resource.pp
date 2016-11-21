@@ -18,7 +18,8 @@ define icinga::resource (
   validate_string($type)
   validate_hash($icinga_config)
 
-  concat_fragment { "icinga_${type}+${title}.cfg":
+  concat::fragment { "icinga_${type}+${title}.cfg":
+    target  => "icinga_${type}",
     content => template('icinga/resource.erb'),
   }
 

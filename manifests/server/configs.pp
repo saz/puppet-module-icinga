@@ -343,43 +343,34 @@ class icinga::server::configs (
     notify  => Class['icinga::server::services'],
   }
 
-  # resource.cfg file
-  concat_build { 'icinga_resourceconf':
-    order => ['*.conf'],
-  }
-
   # uses:
   # user1 d_nagios_plugins
   # user2 d_icinga_plugins
   # user3 d_icinga_eventhandlers
-  concat_fragment { 'icinga_resourceconf+001-start.conf':
+  concat::fragment { 'icinga_resourceconf_start':
+    target  => $f_resourcecfg,
     content => template('icinga/server/resource.cfg.erb'),
+    order   => '01',
   }
 
-  file { $f_resourcecfg:
+  concat { $f_resourcecfg:
     mode    => '0600',
     owner   => $icinga_user,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_resourceconf'],
-    source  => concat_output('icinga_resourceconf'),
   } # end resource.cfg file
 
-  # htpasswd file
-  concat_build { 'icinga_htpasswd':
-    order => ['*.conf'],
-  }
-
-  concat_fragment { 'icinga_htpasswd+001-start.conf':
+  concat::fragment { 'icinga_htpasswd_start':
+    target  => 'icinga_htpasswd',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  file { $f_htpasswd:
+  concat { 'icinga_htpasswd':
+    path    => $f_htpasswd,
     mode    => '0644',
     owner   => root,
     group   => root,
-    require => Concat_build['icinga_htpasswd'],
-    source  => concat_output('icinga_htpasswd'),
   } # end htpasswd file
 
   if $icinga_configure_webserver == true {
@@ -403,14 +394,14 @@ class icinga::server::configs (
       exec { 'dpkg-icinga-override /var/lib/icinga':
         command => "dpkg-statoverride --update --add ${icinga_user} ${icinga_group} 751 /var/lib/icinga",
         unless  => "dpkg-statoverride --list ${icinga_user} ${icinga_group} 751 /var/lib/icinga",
-        path    => '/usr/sbin',
+        path    => ['/usr/bin', '/usr/sbin'],
         notify  => Class['icinga::server::services'],
       }
 
       exec { 'dpkg-icinga-override /var/lib/icinga/rw':
         command => "dpkg-statoverride --update --add ${icinga_user} ${webserver_group} 2710 /var/lib/icinga/rw",
         unless  => "dpkg-statoverride --list ${icinga_user} ${webserver_group} 2710 /var/lib/icinga/rw",
-        path    => '/usr/sbin',
+        path    => ['/usr/bin', '/usr/sbin'],
         notify  => Class['icinga::server::services'],
       }
 
@@ -419,229 +410,199 @@ class icinga::server::configs (
   } # if check external commands
 
   # objects files
-  concat_build { 'icinga_command':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/command.cfg":
+  concat { 'icinga_command':
+    path    => "${d_objects}/command.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_command'],
-    source  => concat_output('icinga_command'),
   }
-  concat_fragment { 'icinga_command+001-start.cfg':
+  concat::fragment { 'icinga_command_start':
+    target  => 'icinga_command',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_contact':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/contact.cfg":
+  concat { 'icinga_contact':
+    path    => "${d_objects}/contact.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_contact'],
-    source  => concat_output('icinga_contact'),
   }
-  concat_fragment { 'icinga_contact+001-start.cfg':
+  concat::fragment { 'icinga_contact_start':
+    target  => 'icinga_contact',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_contactgroup':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/contactgroup.cfg":
+  concat { 'icinga_contactgroup':
+    path    => "${d_objects}/contactgroup.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_contactgroup'],
-    source  => concat_output('icinga_contactgroup'),
   }
-  concat_fragment { 'icinga_contactgroup+001-start.cfg':
+  concat::fragment { 'icinga_contactgroup_start':
+    target  => 'icinga_contactgroup',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_host':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/host.cfg":
+  concat { 'icinga_host':
+    path    => "${d_objects}/host.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_host'],
-    source  => concat_output('icinga_host'),
   }
-  concat_fragment { 'icinga_host+001-start.cfg':
+  concat::fragment { 'icinga_host_start':
+    target  => 'icinga_host',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_hostdependency':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/hostdependency.cfg":
+  concat { 'icinga_hostdependency':
+    path    => "${d_objects}/hostdependency.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_hostdependency'],
-    source  => concat_output('icinga_hostdependency'),
   }
-  concat_fragment { 'icinga_hostdependency+001-start.cfg':
+  concat::fragment { 'icinga_hostdependency_start':
+    target  => 'icinga_hostdependency',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_hostescalation':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/hostescalation.cfg":
+  concat { 'icinga_hostescalation':
+    path    => "${d_objects}/hostescalation.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_hostescalation'],
-    source  => concat_output('icinga_hostescalation'),
   }
-  concat_fragment { 'icinga_hostescalation+001-start.cfg':
+  concat::fragment { 'icinga_hostescalation_start':
+    target  => 'icinga_hostescalation',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_hostextinfo':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/hostextinfo.cfg":
+  concat { 'icinga_hostextinfo':
+    path    => "${d_objects}/hostextinfo.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_hostextinfo'],
-    source  => concat_output('icinga_hostextinfo'),
   }
-  concat_fragment { 'icinga_hostextinfo+001-start.cfg':
+  concat::fragment { 'icinga_hostextinfo_start':
+    target  => 'icinga_hostextinfo',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_hostgroup':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/hostgroup.cfg":
+  concat { 'icinga_hostgroup':
+    path    => "${d_objects}/hostgroup.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_hostgroup'],
-    source  => concat_output('icinga_hostgroup'),
   }
-  concat_fragment { 'icinga_hostgroup+001-start.cfg':
+  concat::fragment { 'icinga_hostgroup_start':
+    target  => 'icinga_hostgroup',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_module':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/module.cfg":
+  concat { 'icinga_module':
+    path    => "${d_objects}/module.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_module'],
-    source  => concat_output('icinga_module'),
   }
-  concat_fragment { 'icinga_module+001-start.cfg':
+  concat::fragment { 'icinga_module_start':
+    target  => 'icinga_module',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_service':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/service.cfg":
+  concat { 'icinga_service':
+    path    => "${d_objects}/service.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_service'],
-    source  => concat_output('icinga_service'),
   }
-  concat_fragment { 'icinga_service+001-start.cfg':
+  concat::fragment { 'icinga_service_start':
+    target  => 'icinga_service',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_servicedependency':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/servicedependency.cfg":
+  concat { 'icinga_servicedependency':
+    path    => "${d_objects}/servicedependency.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_servicedependency'],
-    source  => concat_output('icinga_servicedependency'),
   }
-  concat_fragment { 'icinga_servicedependency+001-start.cfg':
+  concat::fragment { 'icinga_servicedependency_start':
+    target  => 'icinga_servicedependency',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_serviceescalation':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/serviceescalation.cfg":
+  concat { 'icinga_serviceescalation':
+    path    => "${d_objects}/serviceescalation.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_serviceescalation'],
-    source  => concat_output('icinga_serviceescalation'),
   }
-  concat_fragment { 'icinga_serviceescalation+001-start.cfg':
+  concat::fragment { 'icinga_serviceescalation_start':
+    target  => 'icinga_serviceescalation',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_serviceextinfo':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/serviceextinfo.cfg":
+  concat { 'icinga_serviceextinfo':
+    path    => "${d_objects}/serviceextinfo.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_serviceextinfo'],
-    source  => concat_output('icinga_serviceextinfo'),
   }
-  concat_fragment { 'icinga_serviceextinfo+001-start.cfg':
+  concat::fragment { 'icinga_serviceextinfo_start':
+    target  => 'icinga_serviceextinfo',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_servicegroup':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/servicegroup.cfg":
+  concat { 'icinga_servicegroup':
+    path    => "${d_objects}/servicegroup.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_servicegroup'],
-    source  => concat_output('icinga_servicegroup'),
   }
-  concat_fragment { 'icinga_servicegroup+001-start.cfg':
+  concat::fragment { 'icinga_servicegroup_start':
+    target  => 'icinga_servicegroup',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
-  concat_build { 'icinga_timeperiod':
-    order => ['*.cfg'],
-  }
-  file { "${d_objects}/timeperiod.cfg":
+  concat { 'icinga_timeperiod':
+    path    => "${d_objects}/timeperiod.cfg",
     mode    => '0644',
     owner   => root,
     group   => root,
     notify  => Class['icinga::server::services'],
-    require => Concat_build['icinga_timeperiod'],
-    source  => concat_output('icinga_timeperiod'),
   }
-  concat_fragment { 'icinga_timeperiod+001-start.cfg':
+  concat::fragment { 'icinga_timeperiod_start':
+    target  => 'icinga_timeperiod',
     content => "# This file is maintained by Puppet.\n",
+    order   => '01',
   }
 
   Icinga::Resource <||>
