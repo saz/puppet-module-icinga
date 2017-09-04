@@ -11,7 +11,7 @@
 # Copyright 2012, 2013 Nedap Steppingstone.
 #
 class icinga::server::services(
-  $s_icinga =  $::icinga::server::service_icinga,
+  String $s_icinga = $::icinga::server::service_icinga,
 ){
 
   service { $s_icinga:
