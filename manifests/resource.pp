@@ -16,7 +16,7 @@ define icinga1::resource (
 ) {
   concat::fragment { "icinga_${type}+${title}.cfg":
     target  => "icinga_${type}",
-    content => template('icinga/resource.erb'),
+    content => template('icinga1/resource.erb'),
   }
 
 }
