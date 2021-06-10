@@ -1,4 +1,4 @@
-# == Type: icinga::client::resources::plugin
+# == Type: icinga1::client::resources::plugin
 #
 # This is a defined type used to install a custom plugin into the plugindir
 #
@@ -8,9 +8,9 @@
 #   This tells puppet where to find the plugin
 
 
-define icinga::client::resources::plugin (
+define icinga1::client::resources::plugin (
   $plugin_source,
-  $dir_nagios_plugins = $::icinga::client::dir_nagios_plugins,
+  $dir_nagios_plugins = $::icinga1::client::dir_nagios_plugins,
 ) {
 
 
@@ -18,7 +18,7 @@ define icinga::client::resources::plugin (
     owner   => root,
     group   => root,
     mode    => '0755',
-    require => Class['icinga::client::configs'],
+    require => Class['icinga1::client::configs'],
     source  => $plugin_source,
   }
 

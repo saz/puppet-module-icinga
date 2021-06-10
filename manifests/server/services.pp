@@ -1,4 +1,4 @@
-# == Class: icinga::server::services
+# == Class: icinga1::server::services
 #
 # Manages the Icinga daemon.
 #
@@ -10,8 +10,8 @@
 #
 # Copyright 2012, 2013 Nedap Steppingstone.
 #
-class icinga::server::services(
-  String $s_icinga = $::icinga::server::service_icinga,
+class icinga1::server::services(
+  String $s_icinga = $::icinga1::server::service_icinga,
 ){
 
   service { $s_icinga:

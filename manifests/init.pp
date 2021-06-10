@@ -10,7 +10,7 @@
 #
 # Copyright 2012, 2013 Nedap Stepping Stone.
 #
-class icinga {
+class icinga1 {
 
   fail('The class Icinga does nothing on its own.')
 

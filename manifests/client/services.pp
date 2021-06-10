@@ -1,4 +1,4 @@
-# == Class: icinga::client::services
+# == Class: icinga1::client::services
 #
 # Configures the service on each host needed to monitor the machine.
 #
@@ -10,9 +10,9 @@
 #
 # Copyright 2012, 2013 Nedap Steppingstone.
 #
-class icinga::client::services (
-  $s_nrpe_server  = $::icinga::client::service_nagios_nrpe_server,
-  $s_nrpe_pattern = $::icinga::client::service_nagios_nrpe_server_pattern,
+class icinga1::client::services (
+  $s_nrpe_server  = $::icinga1::client::service_nagios_nrpe_server,
+  $s_nrpe_pattern = $::icinga1::client::service_nagios_nrpe_server_pattern,
 ) {
 
   service { $s_nrpe_server:

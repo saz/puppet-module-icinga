@@ -1,4 +1,4 @@
-# == Class: icinga::client::params
+# == Class: icinga1::client::params
 #
 # Client-side configuration parameters for Icinga.
 #
@@ -10,7 +10,7 @@
 #
 # Copyright 2012, 2013 Nedap Steppingstone.
 #
-class icinga::client::params {
+class icinga1::client::params {
   case $::osfamily {
     'Debian': {
       $package_libnagios_perl             = 'libnagios-plugin-perl'

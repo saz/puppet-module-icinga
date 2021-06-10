@@ -10,7 +10,7 @@
 # [*icinga_config*]
 #   The specific params that should be included in the resource
 
-define icinga::resource (
+define icinga1::resource (
   String $type,
   Hash $icinga_config  = {},
 ) {
