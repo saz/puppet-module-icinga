@@ -10,17 +10,13 @@
 # [*icinga_config*]
 #   The specific params that should be included in the resource
 
-define icinga::resource (
-  $type,
-  $icinga_config  = {},
+define icinga1::resource (
+  String $type,
+  Hash $icinga_config  = {},
 ) {
-
-  validate_string($type)
-  validate_hash($icinga_config)
-
   concat::fragment { "icinga_${type}+${title}.cfg":
     target  => "icinga_${type}",
-    content => template('icinga/resource.erb'),
+    content => template('icinga1/resource.erb'),
   }
 
 }

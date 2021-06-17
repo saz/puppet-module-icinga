@@ -1,4 +1,4 @@
-# == Class: icinga::server::params
+# == Class: icinga1::server::params
 #
 # Parameters for the Icinga server.
 #
@@ -10,7 +10,7 @@
 #
 # Copyright 2012, 2013 Nedap Steppingstone.
 #
-class icinga::server::params {
+class icinga1::server::params {
   case $::osfamily {
     'Debian': {
       $package_nrpe_plugin      = 'nagios-nrpe-plugin'
@@ -50,7 +50,7 @@ class icinga::server::params {
       $check_external_commands                     = 0
       $command_check_interval                      = -1
       # if you change the path of commnad_file change the paths in
-      # icinga::server::configs exec's as well
+      # icinga1::server::configs exec's as well
       $command_file                                = '/var/lib/icinga/rw/icinga.cmd'
       $external_command_buffer_slots               = 32768
       $lock_file                                   = $::lsbdistcodename ? {

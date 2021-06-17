@@ -1,4 +1,4 @@
-# == Class: icinga::client::packages
+# == Class: icinga1::client::packages
 #
 # Installs all the client side stuff we need to monitor a host.
 #
@@ -10,18 +10,18 @@
 #
 # Copyright 2012, 2013 Nedap Steppingstone.
 #
-class icinga::client::packages (
-  $p_libnagios_perl            = $::icinga::client::package_libnagios_perl,
-  $p_nagios_nrpe_server        = $::icinga::client::package_nagios_nrpe_server,
-  $p_nagios_plugins_basic      = $::icinga::client::package_nagios_plugins_basic,
-  $p_nagios_plugins_standard   = $::icinga::client::package_nagios_plugins_standard,
-  $p_nagios_plugins_contrib    = $::icinga::client::package_nagios_plugins_contrib,
-  $p_nagios_plugin_check_multi = $::icinga::client::package_nagios_plugin_check_multi,
+class icinga1::client::packages (
+  $p_libnagios_perl            = $::icinga1::client::package_libnagios_perl,
+  $p_nagios_nrpe_server        = $::icinga1::client::package_nagios_nrpe_server,
+  $p_nagios_plugins_basic      = $::icinga1::client::package_nagios_plugins_basic,
+  $p_nagios_plugins_standard   = $::icinga1::client::package_nagios_plugins_standard,
+  $p_nagios_plugins_contrib    = $::icinga1::client::package_nagios_plugins_contrib,
+  $p_nagios_plugin_check_multi = $::icinga1::client::package_nagios_plugin_check_multi,
 ) {
 
   package { $p_nagios_nrpe_server:
     ensure => latest,
-    notify => Class['icinga::client::services'],
+    notify => Class['icinga1::client::services'],
   }
 
   package { [
